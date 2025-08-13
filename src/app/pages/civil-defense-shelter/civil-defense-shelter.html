@@ -1,0 +1,11 @@
+<p>행정안전부_민방위대피시설 (24.03.19)</p>
+
+<div [ngStyle]="{'margin-bottom': '10px'}">
+  <button (click)="dataLoad()">데이터 조회</button>
+</div>
+
+<ibsheet-angular 
+  [options]="sheetOption"
+  [style]="{width: '100%', height: '500px'}"
+  (instance)="getInstance($event)"
+></ibsheet-angular>

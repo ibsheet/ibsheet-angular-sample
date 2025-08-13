@@ -1,0 +1,11 @@
+<p>서울시 정류장 운행 통계 (25.08.05)</p>
+
+<div [ngStyle]="{'margin-bottom': '10px'}">
+  <button (click)="dataLoad()">데이터 조회</button>
+</div>
+
+<ibsheet-angular 
+  [options]="sheetOption"
+  [style]="{width: '100%', height: '350px'}"
+  (instance)="getInstance($event)"
+></ibsheet-angular>

@@ -1,0 +1,36 @@
+<div class="layout-container">
+  <app-sidebar (menuClick)="onMenuClick($event)"></app-sidebar>
+
+  <main class="main-content">
+    <div class="tab-bar" *ngIf="tabs.length > 0">
+      <div
+        class="tab"
+        *ngFor="let tab of tabs"
+        [class.active]="tab.route === activeRoute"
+        (click)="selectTab(tab)"
+        [title]="tab.title"
+      >
+        <span class="tab-title">{{ tab.title }}</span>
+        <span
+          class="close-btn"
+          (click)="closeTab(tab); $event.stopPropagation()"
+        >
+          ×
+        </span>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let tab of tabs">
+      <div
+        class="content-container"
+        [style.display]="tab.route === activeRoute ? 'block' : 'none'"
+      >
+        <ng-container *ngComponentOutlet="tab.component"></ng-container>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="tabs.length === 0">
+      <ng-container *ngComponentOutlet="componentMap['']"></ng-container>
+    </ng-container>
+  </main>
+</div>

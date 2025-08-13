@@ -1,0 +1,11 @@
+<div class="sidebar">
+  <div *ngFor="let item of menuItems"
+       class="menu-item"
+       [class.active]="item.route === activeRoute"
+       (click)="navigate(item)">
+    <span class="icon" *ngIf="item.icon">
+      <fa-icon [icon]="item.icon"></fa-icon>
+    </span>
+    <span class="title">{{ item.title }}</span>
+  </div>
+</div>
