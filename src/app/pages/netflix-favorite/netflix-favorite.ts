@@ -2,7 +2,24 @@ import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IBSheetAngular, type IBSheetOptions, type IBSheetInstance, type IBSheetEvents } from '@ibsheet/angular';
 
-type OnReceiveDataParam = Parameters<NonNullable<IBSheetEvents['onReceiveData']>>[0];
+const handleReceiveData: IBSheetEvents['onReceiveData'] = (param) => {
+  let data = param.data;
+  if(typeof data == 'string') {
+    data = JSON.parse(data);
+  }
+
+  for(let i = 0; i < data.length; i++) {
+    let row: any = data[i];
+    let countrySpt = row['countryFlagImage'].split('|');
+    row['n_country'] = '<img border="0" draggable="false" width="20px" src="'+ countrySpt[1] + '"> ' + row['country'];
+    let movieSpt = row['topMovieImage'].split('|')
+    row['n_topMovie'] = '<img border="0" draggable="false" width="40px" src="'+ movieSpt[1] + '"> ' + row['topMovie'];;
+    let tvSpt = row['topTvShowImage'].split('|');
+    row['n_topTvShow'] = '<img border="0" draggable="false" width="40px" src="'+ tvSpt[1] + '"> ' + row['topTvShow'];;
+  }
+
+  return data;
+}; 
 
 @Component({
   selector: 'app-netflix-favorite',
@@ -48,24 +65,7 @@ export class NetflixFavorite {
       // { Header: "최고인기 TV방송", Name: "topTvShow", Type: "Text", MinWidth: 250, RelWidth: 1, TextSize: '18px', TextFont: "Inter var,ui-sans-serif,system-ui,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'" },
     ],
     Events: {
-      onReceiveData: (evt:OnReceiveDataParam) => {
-        let data = evt.data;
-        if(typeof data == 'string') {
-          data = JSON.parse(data);
-        }
-
-        for(let i = 0; i < data.length; i++) {
-          let row: any = data[i];
-          let countrySpt = row['countryFlagImage'].split('|');
-          row['n_country'] = '<img border="0" draggable="false" width="20px" src="'+ countrySpt[1] + '"> ' + row['country'];
-          let movieSpt = row['topMovieImage'].split('|')
-          row['n_topMovie'] = '<img border="0" draggable="false" width="40px" src="'+ movieSpt[1] + '"> ' + row['topMovie'];;
-          let tvSpt = row['topTvShowImage'].split('|');
-          row['n_topTvShow'] = '<img border="0" draggable="false" width="40px" src="'+ tvSpt[1] + '"> ' + row['topTvShow'];;
-        }
-
-        return data;
-      },
+      onReceiveData: handleReceiveData,
       onRenderFirstFinish: () => {
         this.dataLoad();
       }
